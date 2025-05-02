@@ -5,6 +5,8 @@ from time import sleep
 from Bluetin_Echo import Echo
 from rpi_ws281x import * 
 import Adafruit_PCA9685 
+from robotLight import RobotLight
+import argparse
 
 # GPIO Mode (BOARD / BCM) > from the Adeept Robot Manual
 GPIO.setmode(GPIO.BCM)
@@ -58,6 +60,10 @@ right_backward= 1
 pwm_A = GPIO.PWM(Motor_A_EN, 1000)
 pwm_B = GPIO.PWM(Motor_B_EN, 1000)
 
+    # Lights 
+RL = RobotLight()
+RL.start()
+
     # LED strip configuration:
 LED_FREQ_HZ = 800000 # LED signal frequency in hertz (usually 800khz)
 LED_BRIGHTNESS = 255 # Set to 0 for darkest and 255 for brightest
@@ -70,6 +76,12 @@ pwm.set_pwm_freq(50) #  This servo is controlled by a 50Hz PWM signal
 servo_max = 500
 servo_min = 100
 servo_org = 300
+
+    # Maze Solver
+WALL_DISTANCE = 15    # Desired distance from the wall (in cm)
+TURN_TIME = 0.6       # Time to turn 90 degrees (tune this)
+FORWARD_SPEED = 50    # Speed for forward movement
+
 
 # Define the required functions 
     # Ultrasonic - Object detection 
@@ -92,6 +104,11 @@ def servo_to_min():
     time.sleep(1)
     pwm.set_pwm(SERVO, 0, servo_min)
     time.sleep(1)
+
+def look(angle):
+    pwm.set_pwm(SERVO, 0, angle)
+    time.sleep(0.4)
+    return measureDistance()
 
     # Motor
 def motorStop():
@@ -176,14 +193,8 @@ def move(speed, direction, turn, radius=0.6):   # 0 < radius <= 1
 def destroy():
 	motorStop()
 	GPIO.cleanup()             # Release resource
-	
 
-
-
-     
-
-
-# Define the LED Class
+    # LED 
 class LED:
     def __init__(self):
         self.LED_COUNT      = 16      # Number of LED pixels.
@@ -209,6 +220,51 @@ class LED:
             self.strip.setPixelColor(i, color)
             self.strip.show()
             time.sleep(wait_ms/1000.0)
+
+
+# Maze solver using right-hand following algorithm
+while True:
+    try:
+		    # LED
+        led = LED()
+        led.colorWipe(Color(0, 0, 255))  # Blue LED during turn
+		
+        # Look in all 3 directions
+        front = look(servo_org)
+        right = look(servo_max)
+        left = look(servo_min)
+        
+        if right > WALL_DISTANCE:
+            # Turn right
+            move(FORWARD_SPEED, 'no', 'right')
+            #RL.breath(70,70,255)            # Start breathing mode (soft blue)
+            led.colorWipe(Color(255, 0, 0))  # Blue LED during turn
+            time.sleep(TURN_TIME)
+            motorStop()
+            # Go forward
+            move(FORWARD_SPEED, 'forward', '')
+            time.sleep(0.2)
+            motorStop()
+
+        elif front > WALL_DISTANCE:
+            # Go forward
+            move(FORWARD_SPEED, 'forward', '')
+            time.sleep(0.2)
+            motorStop()
+
+        else:
+            # Turn left
+            move(FORWARD_SPEED, 'no', 'left')
+            #RL.breath(70,70,255)            # Start breathing mode (soft blue)
+            led.colorWipe(Color(255, 0, 0))  # Blue LED during turn
+            time.sleep(TURN_TIME)
+            motorStop()
+
+        time.sleep(0.1)
+
+    except KeyboardInterrupt:
+        destroy()
+        break
 
 
 
