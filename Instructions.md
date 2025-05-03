@@ -1,25 +1,33 @@
-1. Create project folder
-git clone https://github.com/EngSaleha/EE496_Project.git
+1. Create project folder:
 
-2. Create Virtual Environment inside the folder:
-cd EE496_Project
-python3 -m venv env
+`git clone https://github.com/EngSaleha/EE496_Project.git`
 
-3. Activate it: 
-. env/Scripts/\activate 
+3. Create Virtual Environment inside the folder:
 
-4. Install the required libraries:
+`cd EE496_Project`
+
+`python3 -m venv env`
+
+5. Activate it:
+   
+`. env/Scripts/\activate` 
+
+7. Install the required libraries:
+```
 sudo pip3 install -U pip
 sudo apt-get install -y i2c-tools
 sudo pip3 install adafruit-pca9685sudo 
 sudo pip3 install rpi_ws281x
 sudo pip3 install numpy
+```
 
-5. To track changes:
-git pull
+9. To track changes:
+    
+`git pull`
 
-6. To update the repo:
+11. To update the repo:
+```
 git add .
 git commit -m "Comment Your Changes"
 git push -u origin main
-
+```
