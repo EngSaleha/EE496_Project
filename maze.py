@@ -2,7 +2,7 @@
 import RPi.GPIO as GPIO
 import time
 from time import sleep
-from Bluetin_Echo import Echo
+#from Bluetin_Echo import Echo
 from rpi_ws281x import * 
 import Adafruit_PCA9685 
 from robotLight import RobotLight
@@ -93,11 +93,30 @@ REACHED_END = False   # Determine whther endpoing is achieved or not
 
 # Define the required functions 
     # Ultrasonic - Object detection 
-def measureDistance():
+def measureDistanceLib():
     echo = Echo(TRIG, ECHO, speed_of_sound)
     samples = 5
     distance = echo.read('cm', samples)
     print(distance, 'cm')
+    return distance
+
+def measureDistance():
+    # Send a pulse to the sensor
+    GPIO.output(TRIG, True)
+    time.sleep(0.00001)
+    GPIO.output(TRIG, False)
+    # Measure the time taken for the echo to return
+    while GPIO.input(ECHO) == 0:
+        print("echo")
+        pulse_start = time.time()
+    while GPIO.input(ECHO) == 1:
+        print("echo11")
+        pulse_end = time.time()
+    #Time elapsed
+    pulse_duration = pulse_end - pulse_start
+    # Calculate the distance
+    distance = (pulse_duration * 34300)/2
+    distance = round(distance, 2)
     return distance
 
     # Servo: pwm.set_pwm(port_num, deviation_value, PWM_duty_cycle)
