@@ -207,7 +207,7 @@ def reachedEnd():
     status_right = GPIO.input(line_pin_right)  
     status_middle = GPIO.input(line_pin_middle)  
     status_left = GPIO.input(line_pin_left)  
-    if (status_right == 0 or status_left == 0 or status_middle == 0 ):
+    if (status_right == 1 or status_left == 1 or status_middle == 1 ):
         REACHED_END = True
     return REACHED_END
 	
@@ -278,6 +278,7 @@ while True:
             motorStop()
 
         time.sleep(0.1)
+        REACHED_END = reachedEnd()
         if REACHED_END:
             led.colorWipe(Color(0, 255, 0))  # Green LED during turn
             destroy()
