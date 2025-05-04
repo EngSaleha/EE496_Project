@@ -31,6 +31,10 @@ LED_PIN = 12 # GPIO pin connected to the pixels (18 uses PWM!).
 #LED_PIN = 10 # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
 LED_CHANNEL = 0 # set to '1' for GPIOs 13, 19, 41, 45 or 53
 LED_DMA = 10 # DMA channel to use for generating signal (try 10)
+    # Line tracking 
+line_pin_right = 19
+line_pin_middle = 16
+line_pin_left = 20
 
 
 # GPIO Pins Setup
@@ -44,7 +48,10 @@ GPIO.setup(Motor_A_Pin1, GPIO.OUT)
 GPIO.setup(Motor_A_Pin2, GPIO.OUT)
 GPIO.setup(Motor_B_Pin1, GPIO.OUT)
 GPIO.setup(Motor_B_Pin2, GPIO.OUT)
-    # 
+    # Line tracking
+GPIO.setup(line_pin_right,GPIO.IN)
+GPIO.setup(line_pin_middle,GPIO.IN)
+GPIO.setup(line_pin_left,GPIO.IN)
 
 # Define Constants and Objects
     # Ultrasonic 
@@ -81,6 +88,7 @@ servo_org = 300
 WALL_DISTANCE = 15    # Desired distance from the wall (in cm)
 TURN_TIME = 0.6       # Time to turn 90 degrees (tune this)
 FORWARD_SPEED = 50    # Speed for forward movement
+REACHED_END = False   # Determine whther endpoing is achieved or not
 
 
 # Define the required functions 
@@ -193,7 +201,16 @@ def move(speed, direction, turn, radius=0.6):   # 0 < radius <= 1
 def destroy():
 	motorStop()
 	GPIO.cleanup()             # Release resource
-
+	
+    # Line tracking
+def reachedEnd():
+    status_right = GPIO.input(line_pin_right)  
+    status_middle = GPIO.input(line_pin_middle)  
+    status_left = GPIO.input(line_pin_left)  
+    if (status_right == 0 or status_left == 0 or status_middle == 0 ):
+        REACHED_END = True
+    return REACHED_END
+	
     # LED 
 class LED:
     def __init__(self):
@@ -261,7 +278,11 @@ while True:
             motorStop()
 
         time.sleep(0.1)
-
+        if REACHED_END:
+            led.colorWipe(Color(0, 255, 0))  # Green LED during turn
+            destroy()
+            break
+			
     except KeyboardInterrupt:
         destroy()
         break
