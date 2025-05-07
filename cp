@@ -1,1 +1,2 @@
-https://chatgpt.com/share/681ba870-91e8-8008-8743-6c350c95c810
+sudo wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
+sudo dhclient wlan0
