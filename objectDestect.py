@@ -265,56 +265,20 @@ class LED:
 while True:
     try:
 		
-        # Look in all 3 directions
         front = look(servo_org)
         print("front")
         print(front)
-        right = look(servo_min)
-        print("right")
-        print(right)
-        front = look(servo_org)
-        print("front")
-        print(front)
-        left = look(servo_max)
-        print("left")
-        print(left)
-        front = look(servo_org)
-        print("front")
-        print(front)
-        
-        if right > WALL_DISTANCE:
-            # Turn right
-            move(FORWARD_SPEED, 'no', 'right')
-            # #RL.breath(70,70,255)            # Start breathing mode (soft blue)
-            # led.colorWipe(Color(255, 0, 0))  # Blue LED during turn
-            time.sleep(TURN_TIME)
-            motorStop()
-            # Go forward
-            move(FORWARD_SPEED, 'forward', '')
-            time.sleep(0.2)
-            motorStop()
-
-        elif front > WALL_DISTANCE:
-            # # Go forward
-            move(FORWARD_SPEED, 'forward', '')
-            time.sleep(0.2)
-            motorStop()
-
-        else:
-            # Turn left
-            move(FORWARD_SPEED, 'no', 'left')
-            #RL.breath(70,70,255)            # Start breathing mode (soft blue)
-            #led.colorWipe(Color(255, 0, 0))  # Blue LED during turn
-            time.sleep(TURN_TIME)
-            motorStop()
-
-        time.sleep(0.3)
-        REACHED_END = reachedEnd()
-        if REACHED_END:
-            #led.colorWipe(Color(0, 255, 0))  # Green LED during turn
-            destroy()
-            break
-			
+        print("less than 2, forward")
+        move(FORWARD_SPEED, 'forward', '')
+        time.sleep(0.2)
+        if front < 2:
+            right = look(servo_max)
+            if right > 2:
+                look(servo_org)
+                move(FORWARD_SPEED, 'no', 'right')
+                time.sleep(TURN_TIME)
+                motorStop()
+        time.sleep(0.2)
     except KeyboardInterrupt:
         destroy()
         break
