@@ -277,31 +277,31 @@ while True:
         if right > WALL_DISTANCE:
             if front <= 4:
                 # Turn right
-                move(100, 'no', 'right')
+                move(70, 'no', 'right')
                 #led.colorWipe(Color(255, 0, 0))  # Red LED during turn
                 time.sleep(0.4)
-                #motorStop()
+                motorStop()
             # Go forward
-            move(FORWARD_SPEED, 'forward', '')
-            time.sleep(0.4)
+            move(40, 'forward', '')
+            time.sleep(0.3)
             #motorStop()
 
         elif front > WALL_DISTANCE:
             # Go forward
-            move(FORWARD_SPEED, 'forward', '')
-            time.sleep(0.4)
+            move(40, 'forward', '')
+            time.sleep(0.3)
             #motorStop()
 
         elif left > WALL_DISTANCE:
             if front <= 4:
                 # Turn left
-                move(100, 'no', 'left')
+                move(70, 'no', 'left')
             #led.colorWipe(Color(255, 0, 0))  # Red LED during turn
                 time.sleep(0.4)
-                #motorStop()
+                motorStop()
         else:
-            move(100, 'no', 'left')
-            time.sleep(0.8)
+            move(70, 'no', 'left')
+            time.sleep(0.6)
 
 
         time.sleep(0.4)
