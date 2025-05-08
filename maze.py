@@ -292,13 +292,17 @@ while True:
             time.sleep(0.4)
             #motorStop()
 
-        else:
+        elif left > WALL_DISTANCE:
             if front <= 4:
                 # Turn left
                 move(100, 'no', 'left')
             #led.colorWipe(Color(255, 0, 0))  # Red LED during turn
                 time.sleep(0.4)
                 #motorStop()
+        else:
+            move(100, 'no', 'left')
+            time.sleep(0.8)
+
 
         time.sleep(0.4)
         # REACHED_END = reachedEnd()
