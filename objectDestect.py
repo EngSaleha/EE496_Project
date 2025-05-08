@@ -269,21 +269,26 @@ while True:
         print("front")
         print(front)
         print("more than 2, forward")
-        move(FORWARD_SPEED, 'forward', '')
+        move(50, 'forward', '')
         time.sleep(0.2)
-        if front < 2:
+        if front < 12:
             motorStop()
             print("less than 2, stop")
             right = look(servo_max)
             time.sleep(0.1)
             print("right")
             print(right)
-            if right > 2:
+            if right > 12:
                 print("right more than 2, turn")
                 look(servo_org)
-                move(FORWARD_SPEED, 'no', 'right')
-                time.sleep(TURN_TIME)
+                move(100, 'no', 'right')
+                time.sleep(0.4)
                 motorStop()
+            else:
+                move(100, 'no', 'left')
+                time.sleep(0.4)
+                motorStop()
+				
         time.sleep(0.2)
     except KeyboardInterrupt:
         destroy()
