@@ -275,30 +275,30 @@ while True:
         print(front)
 
         if right > WALL_DISTANCE:
-            if front <= 7:
+            if front <= 4:
                 # Turn right
                 move(100, 'no', 'right')
                 #led.colorWipe(Color(255, 0, 0))  # Red LED during turn
                 time.sleep(0.4)
-                motorStop()
+                #motorStop()
             # Go forward
             move(FORWARD_SPEED, 'forward', '')
             time.sleep(0.4)
-            motorStop()
+            #motorStop()
 
         elif front > WALL_DISTANCE:
             # Go forward
             move(FORWARD_SPEED, 'forward', '')
             time.sleep(0.4)
-            motorStop()
+            #motorStop()
 
         else:
-            if front <= 7:
+            if front <= 4:
                 # Turn left
                 move(100, 'no', 'left')
             #led.colorWipe(Color(255, 0, 0))  # Red LED during turn
                 time.sleep(0.4)
-                motorStop()
+                #motorStop()
 
         time.sleep(0.4)
         # REACHED_END = reachedEnd()
