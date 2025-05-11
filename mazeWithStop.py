@@ -84,7 +84,7 @@ servo_min = 80
 servo_org = 300
 
 # Maze Solver
-WALL_DISTANCE = 15     # Desired distance from the wall (in cm)
+WALL_DISTANCE = 7     # Desired distance from the wall (in cm)
 TURN_TIME = 0.35       # Time to turn 90 degrees (tune this)
 FORWARD_SPEED = 50    # Speed for forward movement
 REACHED_END = False   # Determine whether endpoint is achieved or not
@@ -292,7 +292,7 @@ while True:
             time.sleep(0.4)
             motorStop()
 
-        elif left > WALL_DISTANCE:
+        else:
             if front <= 3:
                 # Turn right
                 move(100, 'no', 'right')
@@ -300,13 +300,6 @@ while True:
                 time.sleep(0.4)
                 motorStop()
 
-        else:
-            if front <= 3:
-                # Turn left
-                move(100, 'no', 'left')
-                #led.colorWipe(Color(255, 0, 0))  # Red LED during turn
-                time.sleep(0.8)
-                motorStop()
 
         time.sleep(0.4)
         # REACHED_END = reachedEnd()
